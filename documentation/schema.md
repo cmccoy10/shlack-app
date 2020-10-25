@@ -3,80 +3,99 @@
 Users
 -----
 
-id PK int FK -< ChannelMembers.userId FK -< GroupMembers.userId FK -< DirectMessages.userId FK -< Replies.userId FK -< Reactions.userId
-
-username varchar(20) UNIQUE
-fullName varchar(30)
-email varchar(40) UNIQUE
-imgUrl varchar
-hashedPassword varchar
+| attribute name | data type   | details               |
+|----------------|-------------|-----------------------|
+| id             | integer     | primary key, not null |
+| username       | varchar(20) | not null, unique      |
+| fullName       | varchar(30) | not null              |
+| email          | varchar(40) | not null, unique      |
+| imgUrl         | varchar     |                       |
+| hashedPassword | varchar     | not null, (binary)    |
 
 ChannelMembers
 --------------
 
-id PK int
-channelId int FK
-userId int
+| attribute name | data type | details               |
+|----------------|-----------|-----------------------|
+| id             | integer   | not null, primary key |
+| channelId      | integer   | not null, primary key |
+| userId         | integer   | not null, primary key |
 
 Channels
 --------
 
-id PK int FK -< Pins.channelId FK -< ChannelMembers.channelId FK -< ChannelMessages.channelId
-title varchar(40)
-topic varchar(200)
+| attribute name | data type    | details               |
+|----------------|--------------|-----------------------|
+| id             | integer      | not null, primary key |
+| title          | varchar(40)  | not null              |
+| topic          | varchar(200) |                       |
 
 ChannelMessages
 ---------------
 
-id PK int FK -< Pins.channelMessageId FK -< Replies.channelMessageId FK -< Reactions.channelMessageId
-channelId int FK
-userId int FK
-body varchar(500)
-createdAt date
+| attribute name | data type    | details               |
+|----------------|--------------|-----------------------|
+| id             | integer      | not null, primary key |
+| channelId      | integer      | not null, foreign key |
+| userId         | integer      | not null, foreign key |
+| body           | varchar(5000 | not null              |
+| createdAt      | date         |                       |
 
 Pins
 ----
 
-id PK int
-channelId int FK
-channelMessageId int FK
+| attribute name   | data type | details               |
+|------------------|-----------|-----------------------|
+| id               | integer   | not null, primary key |
+| channelId        | integer   | not null, foreign key |
+| channelMessageId | integer   | not null, foreign key |
 
 Reactions
 ---------
 
-id PK int
-channelMessageId int FK NULL
-directMessageId int FK NULL
-userId int FK
-unicodeVal varchar
+| attribute name   | data type | details               |
+|------------------|-----------|-----------------------|
+| id               | integer   | not null, primary key |
+| channelMessageId | integer   | foreign key           |
+| directMessageId  | integer   | foreign key           |
+| userId           | integer   | not null, foreign key |
+| unicodeVal       | varchar   | not null              |
 
 Replies
 -------
 
-id PK int
-channelMessageId int FK NULL
-directMessageId int FK NULL
-userId int FK
-body varchar(300)
-createdAt date
+| attribute name   | data type    | details               |
+|------------------|--------------|-----------------------|
+| id               | integer      | not null, primary key |
+| channelMessageId | integer      | foreign key           |
+| directMessageId  | integer      | foreign key           |
+| userId           | integer      | not null, foreign key |
+| body             | varchar(300) | not null              |
+| createdAt        | date         |                       |
 
 GroupMembers
 ------------
 
-id PK int
-directGroupId int FK
-userId int FK
+| attribute name | data type | details               |
+|----------------|-----------|-----------------------|
+| id             | integer   | not null, primary key |
+| directGroupId  | integer   | not null, foreign key |
+| userId         | integer   | not null, foreign key |
 
 DirectGroups
 ------------
 
-id PK int FK -< GroupMembers.directGroupId FK -< DirectMessages.directGroupId
+| attribute name | data type    | details               |
+|----------------|--------------|-----------------------|
+| id             | integer      | not null, primary key |
 
 DirectMessages
 --------------
 
-id PK int FK -< Replies.directMessageId FK -< Reactions.directMessageId
-directGroupId int FK
-userId int FK
-body varchar(500)
-createdAt date
+| attribute name | data type    | details               |
+|----------------|--------------|-----------------------|
+| id             | integer      | not null, primary key |
+| directGroupId  | integer      | not null, foreign key |
+| userId         | integer      | not null, foreign key |
+| body           | varchar(500) | not null              |
+| createdAt      | date         |                       |
