@@ -1,12 +1,39 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ChannelMessage = sequelize.define('ChannelMessage', {
-    channelId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER,
-    body: DataTypes.STRING
+    channelId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    body: {
+      type: DataTypes.STRING(500),
+      allowNull: false,
+    }
   }, {});
   ChannelMessage.associate = function(models) {
-    // associations can be defined here
+    ChannelMessage.belongsTo(models.Channel, {
+      foreignKey: "channelId"
+    });
+
+    ChannelMessage.belongsTo(models.User, {
+      foreignKey: "userId"
+    });
+
+    ChannelMessage.belongsTo(models.Pin, {
+      foreignKey: "channelMessageId"
+    });
+
+    ChannelMessage.hasMany(models.Reaction, {
+      foreignKey: "channelMessageId"
+    });
+
+    ChannelMessage.hasMany(models.Reply, {
+      foreignKey: "channelMessageId"
+    });
   };
   return ChannelMessage;
 };

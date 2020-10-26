@@ -9,10 +9,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       channelId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "Channels" },
+        allowNull: false,
       },
       channelMessageId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "ChannelMessages" },
+        allowNull: false,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        references: { model: "Users" },
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

@@ -9,16 +9,21 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       channelMessageId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "ChannelMessages" }
       },
       directMessageId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "DirectMessages" }
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "Users" },
+        allowNull: false,
       },
-      unicode: {
-        type: Sequelize.STRING
+      unicodeVal: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

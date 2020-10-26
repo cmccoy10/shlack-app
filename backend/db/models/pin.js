@@ -1,11 +1,31 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Pin = sequelize.define('Pin', {
-    channelId: DataTypes.INTEGER,
-    channelMessageId: DataTypes.INTEGER
+    channelId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    channelMessageId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   }, {});
   Pin.associate = function(models) {
-    // associations can be defined here
+    Pin.belongsTo(models.Channel, {
+      foreignKey: "channelId"
+    });
+
+    Pin.belongsTo(models.User, {
+      foreignKey: "userId"
+    });
+
+    Pin.hasOne(models.ChannelMessage, {
+      foreignKey: "channelMessageId"
+    });
   };
   return Pin;
 };

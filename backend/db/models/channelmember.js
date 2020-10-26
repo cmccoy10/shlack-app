@@ -1,11 +1,17 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ChannelMember = sequelize.define('ChannelMember', {
-    channelId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER
+    channelId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   }, {});
   ChannelMember.associate = function(models) {
-    // associations can be defined here
+
   };
   return ChannelMember;
 };

@@ -9,13 +9,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       directGroupId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "DirectGroups" },
+        allowNull: false,
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "Users" },
+        allowNull: false,
       },
       body: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(500),
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
