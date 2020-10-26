@@ -23,6 +23,16 @@ ChannelMembers
 | channelId | integer | not null, foreign key |
 | userId | integer | not null, foreign key |
 
+ChannelModerators
+--------------
+
+
+| attribute name | data type | details |
+| - | - | - |
+| id | integer | not null, primary key |
+| channelId | integer | not null, foreign key |
+| userId | integer | not null, foreign key |
+
 Channels
 --------
 
