@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const path = require('path');
 
 const { environment } = require('./config');
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/api/index');
 
 const app = express();
 
@@ -18,14 +18,14 @@ app.use(indexRouter);
 
 /*************** Error Handlers ***************/
 
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
   err.errors = ["The requested resource couldn't be found."];
   err.status = 404;
   next(err);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _req, _res, next) => {
   // check if error is a Sequelize error:
   if (err instanceof ValidationError) {
     err.errors = err.errors.map((e) => e.message);
@@ -34,7 +34,7 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   const isProduction = environment === 'production';
   res.json({

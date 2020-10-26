@@ -1,4 +1,5 @@
 'use strict';
+const bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     username: {
@@ -21,9 +22,23 @@ module.exports = (sequelize, DataTypes) => {
     hashedPassword: {
       type: DataTypes.STRING.BINARY,
       allowNull: false,
+    },
+    tokenId: {
+      type: DataTypes.STRING
     }
   }, {});
   User.associate = function(models) {
+    User.prototype.isValid = () => true;
+
+    User.prototype.setPassword = function (password) {
+      this.hashedPassword = bcrypt.hashSync(password, 10);
+      return this;
+    };
+
+    User.prototype.isValidPassword = function (password) {
+      return bcrypt.compareSync(password, this.hashedPassword.toString());
+    };
+
     const columnMappingDG = {
       through: "GroupMember",
       otherKey: "directGroupId",
@@ -59,6 +74,17 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Reply, {
       foreignKey: "userId"
     })
+
+    // TODO: Customize the Safe Object for JWT if needed
+    User.prototype.toSafeObject = function () {
+      return {
+        createdAt: this.createdAt,
+        email: this.email,
+        id: this.id,
+        name: this.name,
+        updatedAt: this.updatedAt,
+      };
+    };
   };
   return User;
 };
