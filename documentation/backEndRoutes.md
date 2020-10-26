@@ -1,1 +1,24 @@
 # Shlack Backend Routes
+
+- users 
+  - GET /users/:id/ => gets a single users info
+  - GET /users/:id/direct-groups => loads users direct message groups
+  - GET /users/:id/channels => loads all channels the user is in
+  - POST /users => create a new user
+  - POST /users/token => verifies user login and returns token for the user
+  - DELETE /users/:id => delete a user
+- channels
+  - GET /channels/:id => gets all channel messages, title, topic, and number of channel members
+  - GET /channels/:id/members => gets all channel members within that channel
+  - GET /channels/:id/moderators => gets all channel moderators within that channel
+  - GET /channels/:id/pins => getting all of the channel's pins
+  - GET /channels/:id/pins-count => gets total number of pins in channel
+  - POST /channels => creates a new channel
+  - PUT /channels/:id => updates a channel's info
+  - DELETE /channels/:id => deletes a channel
+- direct-groups
+  - GET /direct-groups/:id => gets all direct messages(including responses) and direct members
+  - POST /direct-groups/:id/direct-messages => creates a new direct message
+  - PUT /direct-groups/:id/direct-messages => edits a direct message
+  - POST /direct-groups/:groupId/direct-messages/:dmId/reply => creates a new reply on a direct message
+  - PUT /direct-groups/:id/direct-messages => edits a reply on a direct message
