@@ -11,7 +11,6 @@
    * Users that are logged in can view live messages being sent
    * Users can send messages for others to see live
    * Ability to leave responses on messages to create a thread
-   * Ability to leave emoji's on a message
    * Ability to mention a user/users in a message
 3. Channels
    * Users can create a new channel
@@ -30,6 +29,7 @@
        * Shows Channels, DM's, Mentions
        * Icon to create a new DM
 7. Stretch Goals
+   * Ability to leave reactions on a message
    * Search Messages
    * Ability to pin messages
    * Ability to save items
