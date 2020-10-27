@@ -10,6 +10,7 @@ Users
 | username | varchar(20) | not null, unique |
 | fullName | varchar(30) | not null |
 | email | varchar(40) | not null, unique |
+| bio | varchar(200) |  |
 | imgUrl | varchar |   |
 | hashedPassword | varchar | not null, (binary) |
 
@@ -22,16 +23,8 @@ ChannelMembers
 | id | integer | not null, primary key |
 | channelId | integer | not null, foreign key |
 | userId | integer | not null, foreign key |
+| owner | boolean |  |
 
-ChannelModerators
---------------
-
-
-| attribute name | data type | details |
-| - | - | - |
-| id | integer | not null, primary key |
-| channelId | integer | not null, foreign key |
-| userId | integer | not null, foreign key |
 
 Channels
 --------
