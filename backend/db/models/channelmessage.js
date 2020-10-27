@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId"
     });
 
-    ChannelMessage.belongsTo(models.Pin, {
+    ChannelMessage.hasOne(models.Pin, {
       foreignKey: "channelMessageId"
     });
 

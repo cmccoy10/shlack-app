@@ -44,10 +44,17 @@ const validateUser = [
   ...validateEmailAndPassword,
 ];
 
+const validateChannel = [
+  check("title")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide a channel title")
+]
+
 
 module.exports = {
   validationResult,
   handleValidationErrors,
   validateEmailAndPassword,
-  validateUser
+  validateUser,
+  validateChannel
 };

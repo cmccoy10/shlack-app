@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     topic: {
       type: DataTypes.STRING(200),
-    }
+    },
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {});
   Channel.associate = function(models) {
     Channel.hasMany(models.Pin, {
@@ -22,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
 
     Channel.hasMany(models.ChannelMessage, {
       foreignKey: "channelId"
+    });
+
+    Channel.belongsTo(models.User, {
+      foreignKey: "ownerId"
     });
   };
   return Channel;

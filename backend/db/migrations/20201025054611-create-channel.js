@@ -15,6 +15,11 @@ module.exports = {
       topic: {
         type: Sequelize.STRING(200)
       },
+      ownerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Users" }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

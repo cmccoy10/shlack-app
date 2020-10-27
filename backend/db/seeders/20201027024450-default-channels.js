@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
       return queryInterface.bulkInsert('Channels', [
-        {title: "TheChosenOnes", topic: "Only the chosen...", createdAt: new Date(), updatedAt: new Date() }
+        {title: "TheChosenOnes", topic: "Only the chosen...", ownerId: 1, createdAt: new Date(), updatedAt: new Date() }
     ], {});
   },
 

@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
 
     User.belongsToMany(models.Channel, columnMappingChannel);
 
+    User.hasMany(models.Channel, {
+      foreignKey: "ownerId"
+    });
+
     User.hasMany(models.DirectMessage, {
       foreignKey: "userId"
     });

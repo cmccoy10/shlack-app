@@ -37,9 +37,9 @@ async function findByTokenId(tokenId) {
 async function findOne(id) {
   return await User.findByPk(id);
 }
-//TODO figure out what data needs to be sent back in response
-async function findGroups(userId) {
-  return await GroupMember.findAll({ where: { userId } });
+
+async function findGroups(id) {
+  return await User.findByPk(id, { include: [ DirectGroup ], attributes: [] });
 }
 
 async function findChannels(id) {
