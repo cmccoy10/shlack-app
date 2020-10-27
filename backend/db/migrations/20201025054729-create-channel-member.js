@@ -18,6 +18,9 @@ module.exports = {
         references: { model: "Users" },
         allowNull: false,
       },
+      owner: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

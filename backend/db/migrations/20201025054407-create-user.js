@@ -22,6 +22,9 @@ module.exports = {
         allowNull: false,
         unique: true
       },
+      bio: {
+        type: Sequelize.STRING(200),
+      },
       imgUrl: {
         type: Sequelize.STRING
       },

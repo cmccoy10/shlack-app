@@ -6,15 +6,17 @@ const { jwtConfig: { secret, expiresIn } } = require('../../config');
 const UserRepository = require('../../db/user-repository');
 
 function generateToken(user) {
+  // TODO: Add any data you want to keep in the JWT here
   const data = {
-    name: user.username,
-    // TODO: Add any data you want to keep in the JWT here
+    username: user.username,
+    fullName: user.fullName,
+    email: user.email,
   };
   const jwtid = uuid();
 
   return {
     jti: jwtid,
-    token: jwt.sign({ data }, secret, { expiresIn: Number.parseInt(expiresIn), jwtid }),
+    token: jwt.sign({ data }, secret, { expiresIn: Number.parseInt(expiresIn), jwtid })
   };
 }
 

@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
+    bio: {
+      type: DataTypes.STRING(200),
+    },
     imgUrl: {
       type: DataTypes.STRING,
     },

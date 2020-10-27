@@ -6,37 +6,48 @@ const handleValidationErrors = (req, res, next) => {
   if (!validationErrors.isEmpty()) {
     const errors = validationErrors.array().map((error) => error.msg);
 
-    const err = new Error('Bad Request');
+    const err = Error('Bad request.');
     err.status = 400;
-    err.title = 'Bad Request';
+    err.title = 'Bad request.';
     err.errors = errors;
-
-    next(err);
+    return next(err);
   }
   next();
 };
 
-// TODO: Custom Validations...
-
-// Validators below are being used in users.js and session.js in routes/api
 const validateEmailAndPassword = [
-  check('email')
-    .exists({ checkFalsy: true })
+  check("email")
     .isEmail()
-    .withMessage('Please provide a valid email.'),
-  check('password')
+    .withMessage("Please provide a valid email.")
+    .normalizeEmail(),
+  check("password")
     .exists({ checkFalsy: true })
-    .withMessage('Please provide a password.'),
+    .withMessage("Please provide a password."),
 ];
 
 const validateUser = [
-  check('username').exists({ checkFalsy: true }).withMessage('Please provide a username'),
+  check("fullName")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide a First Name"),
+  check("password")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide a Password"),
+  check("confirmPassword")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide a value for Confirm Password")
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Confirm Password does not match Password");
+      }
+      return true;
+    }),
   ...validateEmailAndPassword,
 ];
+
 
 module.exports = {
   validationResult,
   handleValidationErrors,
   validateEmailAndPassword,
-  validateUser,
+  validateUser
 };

@@ -1,5 +1,9 @@
-// Will be calling these methods on the UserRepository Object
-const { User } = require('./models');
+const {
+  User,
+  Channel,
+  DirectGroup,
+  GroupMember,
+  ChannelMember} = require('./models');
 
 class NullUser {
   isValid() {
@@ -30,8 +34,24 @@ async function findByTokenId(tokenId) {
   return user || new NullUser();
 }
 
+async function findOne(id) {
+  return await User.findByPk(id);
+}
+//TODO figure out what data needs to be sent back in response
+async function findGroups(userId) {
+  return await GroupMember.findAll({ where: { userId } });
+}
+
+async function findChannels(id) {
+  const user = await User.findByPk(id, { include: [ Channel ], attributes: [] })
+  return user.Channels;
+}
+
 module.exports = {
   create,
   findByEmail,
   findByTokenId,
+  findOne,
+  findGroups,
+  findChannels,
 };
