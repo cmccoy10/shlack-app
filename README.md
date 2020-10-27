@@ -10,6 +10,8 @@ Check out the app: [Live Demo](https://)
 * Redux
 * HTML5
 * CSS3
+* Socket.IO
+* Material.UI
 * SASS
 * JavaScript
 * Node.js
