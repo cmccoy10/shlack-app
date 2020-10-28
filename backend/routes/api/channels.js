@@ -18,7 +18,6 @@ router.get("/:id", asyncHandler(async(req, res) => {
     channelMessages: reqMessages,
     memberCount: reqCount
   }
-  console.log(channel);
   return res.json(channel);
 }));
 
@@ -41,7 +40,7 @@ router.post("/:id/join", authenticated, asyncHandler(async(req, res) => {
 }))
 
 // TODO ---> Finish channel delete route
-router.delete("/channels/:id", asyncHandler(async(req, res) => {
+router.delete("/:id", asyncHandler(async(req, res) => {
   await ChannelRepository.deleteChannel(req.params.id);
   return;
 }))
@@ -59,5 +58,42 @@ router.post("/", authenticated, validateChannel, asyncHandler(async (req, res, n
   const channel = await ChannelRepository.createChannel(reqChannel);
   return res.json(channel);
 }));
+
+router.put("/:id", authenticated, asyncHandler(async(req, res) => {
+  const details = req.body;
+  const channel = await ChannelRepository.updateChannel(details, req.params.id);
+  return res.json(channel);
+}))
+
+router.post("/:id/messages", asyncHandler(async(req, res) => {
+  const details = req.body;
+  const message = await ChannelRepository.createMessage(details, req.params.id);
+  return res.json(message);
+}))
+
+router.put("/:id/messages/:messageId", asyncHandler(async(req, res) => {
+  const details = req.body;
+  const message = await ChannelRepository.editMessage(details, req.params.messageId);
+  return res.json(message);
+}))
+
+router.post("/:channelId/messages/:messageId/replies", asyncHandler(async(req, res) => {
+  const details = req.body;
+  const channelMessageId = req.params.messageId;
+  const reply = await ChannelRepository.createReply(details, channelMessageId);
+  return res.json(reply);
+}))
+
+router.put("/:id/messages/:messageId/replies/edit", asyncHandler(async(req, res) => {
+  const details = req.body;
+  const reply = await ChannelRepository.editReply(details)
+  return res.json(reply);
+}))
+
+router.get("/:id/messages/:messageId/replies", asyncHandler(async(req, res) => {
+  const replies = await ChannelRepository.loadReplies(req.params.messageId);
+  return res.json(replies);
+}))
+
 
 module.exports = router;

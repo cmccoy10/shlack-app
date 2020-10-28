@@ -50,13 +50,21 @@ module.exports = (sequelize, DataTypes) => {
 
     User.belongsToMany(models.DirectGroup, columnMappingDG);
 
-    const columnMappingChannel = {
-      through: "ChannelMember",
-      otherKey: "channelId",
-      foreignKey: "userId"
-    }
+    ///////
+    User.hasMany(models.ChannelMember, {
+      foreignKey: "userId",
+      onDelete: "CASCADE",
+      hooks: true,
+    })
+    ///////
 
-    User.belongsToMany(models.Channel, columnMappingChannel);
+    // const columnMappingChannel = {
+    //   through: "ChannelMember",
+    //   otherKey: "channelId",
+    //   foreignKey: "userId"
+    // }
+
+    // User.belongsToMany(models.Channel, columnMappingChannel);
 
     User.hasMany(models.Channel, {
       foreignKey: "ownerId"

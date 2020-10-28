@@ -11,7 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   ChannelMember.associate = function(models) {
-
+    ChannelMember.belongsTo(models.User, {
+      foreignKey: "userId"
+    })
+    ChannelMember.belongsTo(models.Channel, {
+      foreignKey: "channelId"
+    })
   };
   return ChannelMember;
 };

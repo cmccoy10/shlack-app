@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     DirectGroup.belongsToMany(models.User, columnMapping);
 
     DirectGroup.hasMany(models.DirectMessage, {
-      foreignKey: "directGroupId"
+      foreignKey: "directGroupId",
+      onDelete: "CASCADE",
+      hooks: true,
     });
   };
   return DirectGroup;

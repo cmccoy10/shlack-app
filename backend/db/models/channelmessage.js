@@ -24,15 +24,21 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     ChannelMessage.hasOne(models.Pin, {
-      foreignKey: "channelMessageId"
+      foreignKey: "channelMessageId",
+      onDelete: "CASCADE",
+      hooks: true,
     });
 
     ChannelMessage.hasMany(models.Reaction, {
-      foreignKey: "channelMessageId"
+      foreignKey: "channelMessageId",
+      onDelete: "CASCADE",
+      hooks: true,
     });
 
     ChannelMessage.hasMany(models.Reply, {
-      foreignKey: "channelMessageId"
+      foreignKey: "channelMessageId",
+      onDelete: "CASCADE",
+      hooks: true,
     });
   };
   return ChannelMessage;

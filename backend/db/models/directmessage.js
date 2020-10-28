@@ -16,11 +16,15 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DirectMessage.associate = function(models) {
     DirectMessage.hasMany(models.Reply, {
-      foreignKey: "channelMessageId"
+      foreignKey: "channelMessageId",
+      onDelete: "CASCADE",
+      hooks: true,
     });
 
     DirectMessage.hasMany(models.Reaction, {
-      foreignKey: "channelMessageId"
+      foreignKey: "channelMessageId",
+      onDelete: "CASCADE",
+      hooks: true,
     });
 
     DirectMessage.belongsTo(models.DirectGroup, {

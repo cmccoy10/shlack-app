@@ -11,7 +11,7 @@ router.get("/:id", asyncHandler(async(req, res) => {
   return res.json(directMessages);
 }))
 
-router.get("/:groupid/direct-messages/:id", asyncHandler(async(req, res) => {
+router.get("/:groupId/direct-messages/:id", asyncHandler(async(req, res) => {
   const directMessageReplies = await DirectGroupRepository.getReplies(req.params.id);
   return res.json(directMessageReplies);
 }))
@@ -20,18 +20,26 @@ router.post("/:id/direct-messages", asyncHandler(async(req, res) => {
   const details = req.body;
   const directGroupId = req.params.id;
   const directMessage = await DirectGroupRepository.createDM(details, directGroupId);
-  res.json(directMessage);
+  return res.json(directMessage);
 }))
 
-//TODO add route to PUT(edit) a DM
+router.put("/:groupId/direct-messages/:id", asyncHandler(async(req, res) => {
+  const details = req.body;
+  const directMessage = await DirectGroupRepository.editDM(details, req.params.id);
+  return res.json(directMessage);
+}))
 
-router.post("/:groupId/direct-messages/:dmId/reply", asyncHandler(async(req, res) => {
+router.post("/:groupId/direct-messages/:dmId/replies", asyncHandler(async(req, res) => {
   const details = req.body;
   const directMessageId = req.params.dmId;
   const reply = await DirectGroupRepository.createReply(details, directMessageId);
-  res.json(reply);
+  return res.json(reply);
 }))
 
-//TODO add route to PUT(edit) a Reply
+router.put("/:groupId/direct-messages/:dmId/replies/:id", asyncHandler(async(req, res) => {
+  const details = req.body;
+  const reply = await DirectGroupRepository.editReply(details, req.params.id);
+  return res.json(reply);
+}))
 
 module.exports = router;

@@ -20,6 +20,14 @@ async function createDM(details, directGroupId) {
   return directMessage;
 }
 
+async function editDM(details, id) {
+  const message = await DirectMessage.findByPk(id);
+  const { body } = details;
+  message.body = body;
+  const newMessage = await message.save();
+  return newMessage;
+}
+
 async function createReply(details, directMessageId) {
   const { userId, body } = details;
   const reply = await Reply.create({
@@ -30,9 +38,19 @@ async function createReply(details, directMessageId) {
   return reply;
 }
 
+async function editReply(details, id) {
+  const { body } = details;
+  const reply = await Reply.findByPk(id);
+  reply.body = body;
+  const newReply = await reply.save();
+  return newReply;
+}
+
 module.exports = {
   getDirectMessage,
   getReplies,
   createDM,
-  createReply
+  createReply,
+  editDM,
+  editReply
 }
