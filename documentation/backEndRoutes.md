@@ -5,8 +5,6 @@
   - GET /users/:id/direct-groups => loads users direct message groups
   - GET /users/:id/channels => loads all channels the user is in
   - POST /users => create a new user
-  - POST /users/token => verifies user login and returns token for the user
-  - DELETE /users/:id => delete a user
 - channels
   - GET /channels/:id => gets all channel messages, title, topic, and number of channel members
   - GET /channels/:id/members => gets all channel members within that channel
@@ -18,7 +16,10 @@
   - DELETE /channels/:id => deletes a channel
 - direct-groups
   - GET /direct-groups/:id => gets all direct messages(including responses) and direct members
+  - GET /direct-groups/direct-message/:id => gets replies for a direct message
   - POST /direct-groups/:id/direct-messages => creates a new direct message
   - PUT /direct-groups/:id/direct-messages => edits a direct message
   - POST /direct-groups/:groupId/direct-messages/:dmId/reply => creates a new reply on a direct message
   - PUT /direct-groups/:id/direct-messages => edits a reply on a direct message
+- session
+  - PUT / => verifies user login and returns token for the user
