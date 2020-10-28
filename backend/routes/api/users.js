@@ -1,7 +1,6 @@
 const express = require('express');
 
 const UserRepository = require('../../db/user-repository');
-// const { User, Channel } = require("../../db/models");
 const { asyncHandler } = require('../../utils');
 const { authenticated, generateToken } = require('./security-utils');
 const {
@@ -16,23 +15,23 @@ router.get(
   '/',
   asyncHandler(async (req, res) => {
     const users = await User.findAll();
-    res.json(users);
+    res.status(200).json(users);
   })
 );
 
 router.get("/:id", asyncHandler(async(req, res) => {
   const user = await UserRepository.findOne(req.params.id);
-  res.json(user);
+  res.status(200).json(user);
 }))
 
 router.get("/:id/channels", asyncHandler(async(req, res) => {
   const channels = await UserRepository.findChannels(req.params.id);
-  res.json(channels)
+  res.status(200).json(channels)
 }))
 
 router.get("/:id/direct-groups", asyncHandler(async(req, res) => {
   const directGroups = await UserRepository.findGroups(req.params.id)
-  res.json(directGroups);
+  res.status(200).json(directGroups);
 }))
 
 router.post(
@@ -58,7 +57,7 @@ router.post(
     const { jti, token } = generateToken(user);
     user.tokenId = jti;
     await user.save();
-    res.json({ token, user: user.toSafeObject() });
+    res.status(200).json({ token, user: user.toSafeObject() });
   })
 );
 
