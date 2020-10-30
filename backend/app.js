@@ -2,15 +2,31 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
-const ValidationErrors = require
+const createError = require('http-errors');
 const { environment } = require('./config');
+const { Channel } = require("./db/models");
+const ChannelRepository = require("./db/channel-repository");
 
 const app = express();
 
-app.use(cors({ origin: true }));
+const whitelist = ['http://localhost:3000'];
+const corsOptions = {
+  credentials: true, // This is important.
+  origin: (origin, callback) => {
+    if(whitelist.includes(origin)){
+      return callback(null, true)
+    }
+      callback(new Error('Not allowed by CORS'));
+  }
+}
+app.use(cors(corsOptions));
+
 app.use(helmet({ hsts: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 /******************* Routes *******************/
 
@@ -18,26 +34,61 @@ const indexRouter = require('./routes/index');
 
 app.use(indexRouter); //starter route... add more as needed
 
-/*************** Error Handlers ***************/
+/******************* Socket Io *******************/
 
-app.use((req, res, next) => {
-  const err = new Error("The requested resource couldn't be found.");
-  err.errors = ["The requested resource couldn't be found."];
-  err.status = 404;
-  next(err);
+io.on('connection', async (socket) => {
+  console.log(`${socket.id} -- Connected`);
+
+  // Console logs when user has joined a channel
+  socket.on('join', async (channelId) => {
+      const channel = await Channel.findByPk(channelId);
+      if (channel) {
+          socket.join(channel.id, async () => {
+              console.log(`${socket.id} has joined ${channel.name}`);
+          });
+      }
+  });
+
+  // When the socket disconnects, log something to the console.
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} disconnected`);
+  });
+
+  // Gets all channels from database
+  const channels = await Channel.findAll();
+
+  // Listens to all channels in database and sets up listeners
+  for (let channel of channels) {
+    console.log(`listening for messages from ${channel.name}`);
+    socket.on(channel.id, async () => {
+        console.log(`${channel.name} -- working`);
+        const newMessage = await ChannelRepository.createMessage(nickName, channel.id, message);
+        socket.to(channel.id).emit(channel.id, newMessage);
+        socket.emit(channel.id, newMessage);
+    });
+  }
+
 });
 
+/*************** Error Handlers ***************/
 
-app.use((err, req, res, next) => {
+app.use(function(_req, _res, next) {
+  next(createError(404));
+});
+
+app.use(function(err, _req, res, _next) {
   res.status(err.status || 500);
-  const isProduction = environment === 'production';
+  if (err.status === 401) {
+    res.set('WWW-Authenticate', 'Bearer');
+  }
+  const isProduction = environment === "production";
   res.json({
     title: err.title || 'Server Error',
     message: err.message,
-    errors: err.errors,
+    error: JSON.parse(JSON.stringify(err)),
     stack: isProduction ? null : err.stack,
   });
 });
 
 /***********************************************/
-module.exports = app;
+module.exports = http;

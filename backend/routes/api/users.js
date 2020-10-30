@@ -13,18 +13,18 @@ const router = express.Router();
 
 router.get(
   '/',
-  asyncHandler(async (req, res) => {
+  authenticated, asyncHandler(async (req, res) => {
     const users = await User.findAll();
     res.status(200).json(users);
   })
 );
 
-router.get("/:id", asyncHandler(async(req, res) => {
+router.get("/:id", authenticated, asyncHandler(async(req, res) => {
   const user = await UserRepository.findOne(req.params.id);
   res.status(200).json(user);
 }))
 
-router.get("/:id/channels", asyncHandler(async(req, res) => {
+router.get("/:id/channels", authenticated, asyncHandler(async(req, res) => {
   const channels = await UserRepository.findChannels(req.params.id);
   res.status(200).json(channels)
 }))

@@ -39,7 +39,8 @@ async function findOne(id) {
 }
 
 async function findGroups(id) {
-  return await User.findByPk(id, { include: [ DirectGroup ], attributes: [] });
+  const user = await User.findByPk(id, { include: [ DirectGroup ], attributes: [] });
+  return user.DirectGroups;
 }
 
 async function findChannels(id) {
