@@ -15,8 +15,8 @@ async function findOne(id) {
   return channel;
 }
 
-async function findOneMessages(channelId) {
-  const messages = await ChannelMessage.findAll({where: {channelId}})
+async function findOneMessages(id) {
+  const messages = await Channel.findByPk(id, {include: ChannelMessage})
   return messages;
 }
 

@@ -70,6 +70,11 @@ router.post("/:id/messages", authenticated, asyncHandler(async(req, res) => {
   return res.status(201).json(message);
 }))
 
+router.get("/:id/messages", asyncHandler(async(req, res) => {
+  const messages = await ChannelRepository.findOneMessages(req.params.id);
+  return res.status(201).json(messages);
+}))
+
 router.put("/:id/messages/:messageId", authenticated, asyncHandler(async(req, res) => {
   const details = req.body;
   const message = await ChannelRepository.editMessage(details, req.params.messageId);

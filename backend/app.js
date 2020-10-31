@@ -44,7 +44,7 @@ io.on('connection', async (socket) => {
       const channel = await Channel.findByPk(channelId);
       if (channel) {
           socket.join(channel.id, async () => {
-              console.log(`${socket.id} has joined ${channel.name}`);
+              console.log(`${socket.id} has joined ${channel.title}`);
           });
       }
   });
@@ -59,10 +59,10 @@ io.on('connection', async (socket) => {
 
   // Listens to all channels in database and sets up listeners
   for (let channel of channels) {
-    console.log(`listening for messages from ${channel.name}`);
-    socket.on(channel.id, async () => {
-        console.log(`${channel.name} -- working`);
-        const newMessage = await ChannelRepository.createMessage(nickName, channel.id, message);
+    console.log(`listening for messages from ${channel.title}`);
+    socket.on(channel.id, async ({userId, body}) => {
+        console.log(`${channel.title} -- working`);
+        const newMessage = await ChannelRepository.createMessage({userId, body}, channel.id);
         socket.to(channel.id).emit(channel.id, newMessage);
         socket.emit(channel.id, newMessage);
     });

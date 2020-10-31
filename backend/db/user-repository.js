@@ -43,9 +43,12 @@ async function findGroups(id) {
   return user.DirectGroups;
 }
 
-async function findChannels(id) {
-  const user = await User.findByPk(id, { include: [ Channel ], attributes: [] })
-  return user.Channels;
+async function findChannels(userId) {
+  const user = await ChannelMember.findAll({where: { userId }, include: { model: Channel }, attributes: [] })
+  const channels = user.map(channel => {
+    return channel.Channel;
+  })
+  return channels;
 }
 
 module.exports = {
