@@ -16,8 +16,30 @@ async function findOne(id) {
 }
 
 async function findOneMessages(id) {
-  const messages = await Channel.findByPk(id, {include: ChannelMessage})
-  return messages;
+  const channel = await Channel.findByPk(id, {include: {model: ChannelMessage, include: {model: User}}})
+  const channelMessages = channel.ChannelMessages.map(message => {
+    return {
+      id: message.id,
+      channelId: message.channelId,
+      userId: message.userId,
+      body: message.body,
+      createdAt: message.createdAt,
+      updatedAt: message.updatedAt,
+      username: message.User.username,
+      fullName: message.User.fullName,
+      imgUrl: message.User.imgUrl
+    }
+  })
+  const channelResponse = {
+    id: channel.id,
+    title: channel.title,
+    topic: channel.topic,
+    ownerId: channel.ownerId,
+    createdAt: channel.createdAt,
+    updatedAt: channel.updatedAt,
+    ChannelMessages: channelMessages
+  };
+  return channelResponse;
 }
 
 async function findMemberCount(channelId) {
@@ -49,11 +71,13 @@ async function joinChannel(userId, channelId) {
 }
 
 async function updateChannel(details, id) {
+  console.log("Details", details)
   const { title, topic } = details;
   const channel = await Channel.findByPk(id);
   channel.title = title;
   channel.topic = topic;
   const updatedChannel = await channel.save();
+  console.log("Updated Channel", updatedChannel)
   return updatedChannel;
 }
 
@@ -64,7 +88,20 @@ async function createMessage(details, channelId) {
     userId,
     body
   })
-  return message;
+  const id = message.id;
+  const messageWithUser = await ChannelMessage.findByPk(id, {include: [User]})
+  const messageToSend = {
+    id: messageWithUser.id,
+    channelId: messageWithUser.channelId,
+    userId: messageWithUser.userId,
+    body: messageWithUser.body,
+    createdAt: messageWithUser.createdAt,
+    updatedAt: messageWithUser.updatedAt,
+    username: messageWithUser.User.username,
+    fullName: messageWithUser.User.fullName,
+    imgUrl: messageWithUser.User.imgUrl
+  }
+  return messageToSend;
 }
 
 async function editMessage(details, id) {

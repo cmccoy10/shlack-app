@@ -1,10 +1,11 @@
 const express = require('express');
-
+const { Channel, ChannelMessage, User } = require("../../db/models");
 const ChannelRepository = require('../../db/channel-repository');
 const { asyncHandler } = require('../../utils');
 const { validateChannel, validationResult } = require('../../validations');
 const { authenticated } = require('./security-utils');
 const router = express.Router();
+const UserRepository = require("../../db/user-repository");
 
 router.get("/:id", asyncHandler(async(req, res) => {
   const reqChannel = await ChannelRepository.findOne(req.params.id);
@@ -40,8 +41,16 @@ router.post("/:id/join", authenticated, asyncHandler(async(req, res) => {
 }))
 
 router.delete("/:id", authenticated, asyncHandler(async(req, res) => {
-  await ChannelRepository.deleteChannel(req.params.id);
-  return res.status(200);
+  const id = req.user.id;
+  const channel = await ChannelRepository.findOne(req.params.id);
+  if (channel.ownerId === id) {
+    await ChannelRepository.deleteChannel(req.params.id);
+    const newChannels = await UserRepository.findChannels(id);
+    return res.status(200).json(newChannels);
+  } else {
+    return res.status(401);
+  }
+
 }))
 
 router.post("/", authenticated, validateChannel, asyncHandler(async (req, res, next) => {
@@ -60,8 +69,16 @@ router.post("/", authenticated, validateChannel, asyncHandler(async (req, res, n
 
 router.put("/:id", authenticated, asyncHandler(async(req, res) => {
   const details = req.body;
-  const channel = await ChannelRepository.updateChannel(details, req.params.id);
-  return res.status(200).json(channel);
+  const id = req.user.id;
+  const channel = await ChannelRepository.findOne(req.params.id);
+  if (channel.ownerId === id) {
+    await ChannelRepository.updateChannel(details, req.params.id);
+    const newChannels = await UserRepository.findChannels(id);
+    return res.status(200).json(newChannels);
+  } else {
+    return res.status(401);
+  }
+
 }))
 
 router.post("/:id/messages", authenticated, asyncHandler(async(req, res) => {
@@ -72,13 +89,14 @@ router.post("/:id/messages", authenticated, asyncHandler(async(req, res) => {
 
 router.get("/:id/messages", asyncHandler(async(req, res) => {
   const messages = await ChannelRepository.findOneMessages(req.params.id);
-  return res.status(201).json(messages);
+  return res.status(200).json(messages);
 }))
 
 router.put("/:id/messages/:messageId", authenticated, asyncHandler(async(req, res) => {
   const details = req.body;
   const message = await ChannelRepository.editMessage(details, req.params.messageId);
-  return res.status(200).json(message);
+  const messageResponse = message;
+  return res.status(200).json(messageResponse.ChannelMessages);
 }))
 
 router.post("/:channelId/messages/:messageId/replies", authenticated, asyncHandler(async(req, res) => {
