@@ -28,7 +28,7 @@ router.put(
     const { jti, token } = generateToken(user);
     user.tokenId = jti;
     await user.save();
-    res.json({ token, user: user.toSafeObject() });
+    res.json({ token, user: user.toSafeObject(), username: user.username, userImg: user.imgUrl });
   })
 );
 

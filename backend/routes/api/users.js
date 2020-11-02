@@ -1,5 +1,5 @@
 const express = require('express');
-
+const { User } = require("../../db/models");
 const UserRepository = require('../../db/user-repository');
 const { asyncHandler } = require('../../utils');
 const { authenticated, generateToken } = require('./security-utils');
@@ -57,7 +57,7 @@ router.post(
     const { jti, token } = generateToken(user);
     user.tokenId = jti;
     await user.save();
-    res.status(200).json({ token, user: user.toSafeObject() });
+    res.status(200).json({ token, user: user.toSafeObject(), username: user.username, userImg: user.imgUrl });
   })
 );
 

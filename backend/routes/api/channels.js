@@ -9,14 +9,14 @@ const UserRepository = require("../../db/user-repository");
 
 router.get("/:id", asyncHandler(async(req, res) => {
   const reqChannel = await ChannelRepository.findOne(req.params.id);
-  const reqMessages = await ChannelRepository.findOneMessages(req.params.id);
+  const members = await ChannelRepository.findChannelMembers(req.params.id);
   const reqCount = await ChannelRepository.findMemberCount(req.params.id);
   const channel = {
     id: reqChannel.id,
     title: reqChannel.title,
     topic: reqChannel.topic,
     ownerId: reqChannel.ownerId,
-    channelMessages: reqMessages,
+    channelMembers: members,
     memberCount: reqCount
   }
   return res.status(200).json(channel);
@@ -33,11 +33,16 @@ router.get("/:id/pins", asyncHandler(async(req, res) => {
 }))
 
 router.post("/:id/join", authenticated, asyncHandler(async(req, res) => {
-  const channelId = req.params.id;
-  const { userId } = req.body;
-  await ChannelRepository.joinChannel(userId, channelId);
+  const { userId, channelId } = req.body;
+  const id = req.user.id;
   const channel = await ChannelRepository.findOne(channelId);
-  return res.status(201).json(channel);
+  if (channel.ownerId === id) {
+    await ChannelRepository.joinChannel(userId, channelId);
+    const channel = await ChannelRepository.findOne(channelId);
+    return res.status(201).json(channel);
+  } else {
+    return res.status(401);
+  }
 }))
 
 router.delete("/:id", authenticated, asyncHandler(async(req, res) => {

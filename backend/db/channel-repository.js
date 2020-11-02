@@ -48,8 +48,12 @@ async function findMemberCount(channelId) {
 }
 
 async function findChannelMembers(channelId) {
-  const members = await ChannelMember.findAll({where: {channelId}});
-  return members;
+  const members = await ChannelMember.findAll({where: {channelId}, include: {model: User}});
+  const channelMembers = members.map(member => {
+    return member.User;
+  })
+
+  return channelMembers;
 }
 
 async function findPins(channelId) {
