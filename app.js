@@ -14,13 +14,14 @@ const corsOptions = {
   credentials: true, // This is important.
   origin: (origin, callback) => {
     if(whitelist.includes(origin)){
-      return callback(null, true)
-    }
+      callback(null, true)
+    } else {
       callback(new Error('Not allowed by CORS'));
+    }
   }
 }
-// app.use(cors(corsOptions));
-app.use(cors());
+app.use(cors(corsOptions));
+// app.use(cors());
 
 app.use(helmet({ hsts: false }));
 app.use(express.json());
