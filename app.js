@@ -16,9 +16,9 @@ const corsOptions = {
   credentials: true, // This is important.
   origin: (origin, callback) => {
     if(whitelist.includes(origin)){
-      callback(null, true)
+      callback(null, {origin: true})
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'), {origin: false});
     }
   }
 }
