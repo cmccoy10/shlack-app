@@ -8,6 +8,8 @@ const { Channel } = require("./db/models");
 const ChannelRepository = require("./db/channel-repository");
 
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 const whitelist = ['http://localhost:3000', 'https://master.d11hr0s58u56b0.amplifyapp.com'];
 const corsOptions = {
@@ -27,8 +29,6 @@ app.use(helmet({ hsts: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
 
 /******************* Routes *******************/
 
