@@ -75,13 +75,11 @@ async function joinChannel(userId, channelId) {
 }
 
 async function updateChannel(details, id) {
-  console.log("Details", details)
   const { title, topic } = details;
   const channel = await Channel.findByPk(id);
   channel.title = title;
   channel.topic = topic;
   const updatedChannel = await channel.save();
-  console.log("Updated Channel", updatedChannel)
   return updatedChannel;
 }
 

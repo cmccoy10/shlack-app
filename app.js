@@ -9,7 +9,7 @@ const ChannelRepository = require("./db/channel-repository");
 
 const app = express();
 
-const whitelist = ['http://localhost:3000'];
+const whitelist = ['http://localhost:3000', 'https://master.d11hr0s58u56b0.amplifyapp.com/'];
 const corsOptions = {
   credentials: true, // This is important.
   origin: (origin, callback) => {
