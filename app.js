@@ -8,29 +8,28 @@ const { Channel } = require("./db/models");
 const ChannelRepository = require("./db/channel-repository");
 
 const app = express();
-// app.use(helmet({ hsts: false }));
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
 const whitelist = ['http://localhost:3000', 'https://master.d11hr0s58u56b0.amplifyapp.com'];
 const corsOptions = {
-  credentials: true, // This is important.
-  origin: (origin, callback) => {
-      if(whitelist.includes(origin)){
-      console.log(" test ")
-      callback(null, {origin: true})
-    } else {
-      callback(new Error('Not allowed by CORS'), {origin: false});
+    credentials: true, // This is important.
+    origin: (origin, callback) => {
+        if(whitelist.includes(origin)){
+            console.log(" test ")
+            callback(null, {origin: true})
+        } else {
+            callback(new Error('Not allowed by CORS'), {origin: false});
+        }
     }
-  }
 }
 app.use((req, res, next) => {
-  console.log("inside middleware")
-  res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000");
-  next();
+    console.log("inside middleware")
+    res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000");
+    next();
 })
 app.use(cors(corsOptions));
-// app.use(cors());
+app.use(helmet({ hsts: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
