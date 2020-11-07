@@ -21,7 +21,8 @@ class NullUser {
 async function create(details) {
   const user = await User.build(details);
   user.setPassword(details.password);
-  return await user.save();
+  await user.save();
+  return user;
 }
 
 async function findByEmail(email) {

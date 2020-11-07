@@ -38,7 +38,17 @@ router.post("/:id/join", authenticated, asyncHandler(async(req, res) => {
   const channel = await ChannelRepository.findOne(channelId);
   if (channel.ownerId === id) {
     await ChannelRepository.joinChannel(userId, channelId);
-    const channel = await ChannelRepository.findOne(channelId);
+    const reqChannel = await ChannelRepository.findOne(channelId);
+    const members = await ChannelRepository.findChannelMembers(channelId);
+    const reqCount = await ChannelRepository.findMemberCount(channelId);
+    const channel = {
+        id: reqChannel.id,
+        title: reqChannel.title,
+        topic: reqChannel.topic,
+        ownerId: reqChannel.ownerId,
+        channelMembers: members,
+        memberCount: reqCount
+  }
     return res.status(201).json(channel);
   } else {
     return res.status(401);

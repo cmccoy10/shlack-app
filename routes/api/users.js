@@ -57,7 +57,7 @@ router.post(
     const { jti, token } = generateToken(user);
     user.tokenId = jti;
     await user.save();
-    res.status(200).json({ token, user: user.toSafeObject(), username: user.username, userImg: user.imgUrl });
+    res.status(200).json({ token, user: user.toSafeObject(), username: user.username, imgUrl: user.imgUrl });
   })
 );
 
