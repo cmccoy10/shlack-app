@@ -16,7 +16,6 @@ const corsOptions = {
     credentials: true, // This is important.
     origin: (origin, callback) => {
         if(whitelist.includes(origin)){
-            console.log(" test ")
             callback(null, {origin: true})
         } else {
             callback(new Error('Not allowed by CORS'), {origin: false});
@@ -24,7 +23,6 @@ const corsOptions = {
     }
 }
 app.use((req, res, next) => {
-    console.log("inside middleware")
     res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000");
     next();
 })
@@ -50,7 +48,7 @@ io.on('connection', async (socket) => {
       const channel = await Channel.findByPk(channelId);
       if (channel) {
           socket.join(channel.id, async () => {
-              console.log(`${socket.id} has joined ${channel.title}`);
+              console.log(`\n${socket.id} has joined ${channel.title}\n`);
           });
       }
   });
