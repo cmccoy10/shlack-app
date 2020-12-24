@@ -78,7 +78,17 @@ router.post("/", authenticated, validateChannel, asyncHandler(async (req, res, n
     topic: req.body.topic,
     ownerId: req.body.ownerId
   }
-  const channel = await ChannelRepository.createChannel(reqChannel);
+  const newChannel = await ChannelRepository.createChannel(reqChannel);
+  const members = await ChannelRepository.findChannelMembers(newChannel.id);
+  const reqCount = await ChannelRepository.findMemberCount(newChannel.id);
+  const channel = {
+    id: newChannel.id,
+    title: newChannel.title,
+    topic: newChannel.topic,
+    ownerId: newChannel.ownerId,
+    channelMembers: members,
+    memberCount: reqCount
+  }
   return res.status(201).json(channel);
 }));
 
