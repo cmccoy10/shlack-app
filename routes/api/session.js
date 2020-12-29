@@ -22,7 +22,7 @@ router.put(
       const err = new Error('Login failed');
       err.status = 401;
       err.title = 'Login failed';
-      err.errors = ['Invalid credentials'];
+      err.errors = [{"msg": 'Invalid credentials'}];
       return next(err);
     }
     const { jti, token } = generateToken(user);
