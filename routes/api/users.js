@@ -25,8 +25,13 @@ router.get("/:id", authenticated, asyncHandler(async(req, res) => {
 }))
 
 router.get("/:id/channels", authenticated, asyncHandler(async(req, res) => {
-  const channels = await UserRepository.findChannels(req.params.id);
-  res.status(200).json(channels)
+  try {
+      const channels = await UserRepository.findChannels(req.params.id);
+      res.status(200).json(channels)
+  } catch (e) {
+        return res.status(401).json("Unauthorized")
+  }
+
 }))
 
 router.get("/:id/direct-groups", asyncHandler(async(req, res) => {
